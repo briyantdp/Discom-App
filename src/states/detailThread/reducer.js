@@ -3,6 +3,7 @@ import { ActionType } from "./action";
 function detailThreadReducer(detailThread = {}, action = {}) {
   switch (action.type) {
     case ActionType.RECEIVE_DETAIL_THREAD:
+      console.log(action.payload.thread);
       return action.payload.detailThread;
     case ActionType.UP_VOTE_THREAD ||
       ActionType.NEUTRALIZE_VOTE_THREAD ||

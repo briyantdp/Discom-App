@@ -5,7 +5,7 @@ import authUserReducer from "./authUser/reducer";
 import isPreloadReducer from "./isPreload/reducer";
 import leaderboardReducer from "./leaderboard/reducer";
 import threadsReducer from "./threads/reducer";
-import detailThreadReducer from "./threadDetail/reducer";
+import detailThreadReducer from "./detailThread/reducer";
 import usersReducer from "./users/reducer";
 
 const store = configureStore({

@@ -99,14 +99,12 @@ export default function HomePage() {
                     />
                     <Typography
                       variant="paragraph"
-                      ripple={user.name.toString()}
                       className="threads__author__name text-black font-bold"
                     >
                       {user.name}
                     </Typography>
                     <Typography
                       variant="paragraph"
-                      ripple={createdAt.toString()}
                       className="threads__author__createdAt text-black"
                     >
                       {createdAt}
