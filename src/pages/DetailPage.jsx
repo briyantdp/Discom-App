@@ -34,9 +34,12 @@ export default function DetailPage() {
 
   const createCommentHandler = (event) => {
     event.preventDefault();
-
     dispatch(asyncAddComment({ threadId, content }));
   };
+
+  if (!detailThread.owner) {
+    return <p>Loading....</p>;
+  }
 
   return (
     <main className="detail-thread flex flex-col gap-4 py-56 md:py-48 lg:py-36 lg:container lg:mx-auto text-white">
