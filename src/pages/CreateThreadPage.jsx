@@ -1,31 +1,18 @@
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import {
-  Card,
-  CardBody,
-  Typography,
-  Input,
-  Button,
-  Textarea,
-} from "@material-tailwind/react";
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { Card, CardBody, Typography } from '@material-tailwind/react';
 
-import useInput from "../hooks/useInput";
+import ThreadInput from '../components/ThreadInput';
 
-import { asyncAddThread } from "../states/threads/action";
+import { asyncAddThread } from '../states/threads/action';
 
 export default function CreateThreadPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [title, onTitleChange] = useInput("");
-  const [category, onCategoryChange] = useInput("");
-  const [body, onBodyChange] = useInput("");
-
-  const createThreadHandler = (event) => {
-    event.preventDefault();
-
+  const addThreadHandler = ({ title, category, body }) => {
     dispatch(asyncAddThread({ title, category, body }));
-    navigate("/");
+    navigate('/');
   };
 
   return (
@@ -35,35 +22,7 @@ export default function CreateThreadPage() {
           <Typography variant="h3" color="black" className="text-center">
             Tambah Thread
           </Typography>
-          <form
-            className="mt-8 mb-2 flex flex-col gap-3"
-            onSubmit={createThreadHandler}
-          >
-            <Input
-              type="text"
-              label="Judul"
-              size="lg"
-              value={title}
-              onChange={onTitleChange}
-            />
-            <Input
-              type="text"
-              label="Kategori"
-              size="lg"
-              value={category}
-              onChange={onCategoryChange}
-            />
-            <Textarea
-              variant="static"
-              placeholder="Apa yang anda pikirkan ?"
-              rows={8}
-              value={body}
-              onChange={onBodyChange}
-            />
-            <Button type="submit" variant="gradient">
-              Buat
-            </Button>
-          </form>
+          <ThreadInput addThread={addThreadHandler} />
         </CardBody>
       </Card>
     </main>
