@@ -1,13 +1,17 @@
-import { showLoading, hideLoading } from "react-redux-loading-bar";
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import toast from 'react-hot-toast';
 
-import api from "../../utils/api";
+import { addCategoryActionCreator } from '../categories/action';
+
+import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_THREADS: "RECEIVE_THREADS",
-  ADD_THREAD: "ADD_THREAD",
-  UP_VOTE_THREAD: "UP_VOTE_THREAD",
-  NEUTRALIZE_VOTE_THREAD: "NEUTRALIZE_VOTE_THREAD",
-  DOWN_VOTE_THREAD: "DOWN_VOTE_THREAD",
+  RECEIVE_THREADS: 'RECEIVE_THREADS',
+  FILTER_THREADS_BY_CATEGORY: 'FILTER_THREADS_BY_CATEGORY',
+  ADD_THREAD: 'ADD_THREAD',
+  UP_VOTE_THREAD: 'UP_VOTE_THREAD',
+  NEUTRALIZE_VOTE_THREAD: 'NEUTRALIZE_VOTE_THREAD',
+  DOWN_VOTE_THREAD: 'DOWN_VOTE_THREAD',
 };
 
 function receiveThreadsActionCreator(threads) {
@@ -28,48 +32,52 @@ function addThreadActionCreator(thread) {
   };
 }
 
-function upVoteThreadActionCreator({ userId, threadId, voteType }) {
+function upVoteThreadActionCreator({ userId, threadId }) {
   return {
     type: ActionType.UP_VOTE_THREAD,
     payload: {
       userId,
       threadId,
-      voteType,
     },
   };
 }
 
-function neutralizeVoteThreadActionCreator({ userId, threadId, voteType }) {
+function neutralizeVoteThreadActionCreator({ userId, threadId }) {
   return {
     type: ActionType.NEUTRALIZE_VOTE_THREAD,
     payload: {
       userId,
       threadId,
-      voteType,
     },
   };
 }
 
-function downVoteThreadActionCreator({ userId, threadId, voteType }) {
+function downVoteThreadActionCreator({ userId, threadId }) {
   return {
     type: ActionType.DOWN_VOTE_THREAD,
     payload: {
       userId,
       threadId,
-      voteType,
     },
   };
 }
 
 function asyncAddThread({ title, body, category }) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(showLoading());
 
+    const { categories } = getState();
+    const isCategoryExist = categories.includes(category);
+
     try {
-      const thread = await api.createThread({ title, body, category });
-      dispatch(addThreadActionCreator(thread));
+      const newThread = await api.createThread({ title, body, category });
+      if (!isCategoryExist) {
+        dispatch(addCategoryActionCreator(newThread.category));
+      }
+      dispatch(addThreadActionCreator(newThread));
+      toast.success('Diskusi baru berhasil ditambahkan');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
 
     dispatch(hideLoading());
@@ -79,56 +87,60 @@ function asyncAddThread({ title, body, category }) {
 function asyncUpVoteThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
+
+    dispatch(showLoading());
     dispatch(upVoteThreadActionCreator({ userId: authUser.id, threadId }));
 
     try {
-      const { userId, threadId, voteType } = await api.upVoteThread(threadId);
-
-      dispatch(upVoteThreadActionCreator({ userId, threadId, voteType }));
+      await api.upVoteThread(threadId);
+      toast.success('Upvote diskusi berhasil!');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(upVoteThreadActionCreator({ userId: authUser.id, threadId }));
     }
+
+    dispatch(hideLoading());
   };
 }
 
 function asyncNeutralizeVoteThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
+
+    dispatch(showLoading());
     dispatch(
-      neutralizeVoteThreadActionCreator({ userId: authUser.id, threadId })
+      neutralizeVoteThreadActionCreator({ userId: authUser.id, threadId }),
     );
 
     try {
-      const { userId, threadId, voteType } = await api.neutralizeVoteThread(
-        threadId
-      );
-
-      dispatch(
-        neutralizeVoteThreadActionCreator({ userId, threadId, voteType })
-      );
+      await api.neutralizeVoteThread(threadId);
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(
-        neutralizeVoteThreadActionCreator({ userId: authUser.id, threadId })
+        neutralizeVoteThreadActionCreator({ userId: authUser.id, threadId }),
       );
     }
+
+    dispatch(hideLoading());
   };
 }
 
 function asyncDownVoteThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
+
+    dispatch(showLoading());
     dispatch(downVoteThreadActionCreator({ userId: authUser.id, threadId }));
 
     try {
-      const { userId, threadId, voteType } = await api.downVoteThread(threadId);
-
-      dispatch(downVoteThreadActionCreator({ userId, threadId, voteType }));
+      await api.downVoteThread(threadId);
+      toast.success('Downvote diskusi berhasil!');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(downVoteThreadActionCreator({ userId: authUser.id, threadId }));
     }
+
+    dispatch(hideLoading());
   };
 }
 

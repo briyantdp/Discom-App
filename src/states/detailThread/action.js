@@ -1,16 +1,17 @@
-import { showLoading, hideLoading } from "react-redux-loading-bar";
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import toast from 'react-hot-toast';
 
-import api from "../../utils/api";
+import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_DETAIL_THREAD: "RECEIVE_DETAIL_THREAD",
-  UP_VOTE_THREAD: "UP_VOTE_THREAD",
-  NEUTRALIZE_VOTE_THREAD: "NEUTRALIZE_VOTE_THREAD",
-  DOWN_VOTE_THREAD: "DOWN_VOTE_THREAD",
-  ADD_COMMENT: "ADD_COMMENT",
-  UP_VOTE_COMMENT: "UP_VOTE_COMMENT",
-  NEUTRALIZE_VOTE_COMMENT: "NEUTRALIZE_VOTE_COMMENT",
-  DOWN_VOTE_COMMENT: "DOWN_VOTE_COMMENT",
+  RECEIVE_DETAIL_THREAD: 'RECEIVE_DETAIL_THREAD',
+  UP_VOTE_DETAIL_THREAD: 'UP_VOTE_DETAIL_THREAD',
+  NEUTRALIZE_VOTE_DETAIL_THREAD: 'NEUTRALIZE_VOTE_DETAIL_THREAD',
+  DOWN_VOTE_DETAIL_THREAD: 'DOWN_VOTE_DETAIL_THREAD',
+  ADD_COMMENT: 'ADD_COMMENT',
+  UP_VOTE_COMMENT: 'UP_VOTE_COMMENT',
+  NEUTRALIZE_VOTE_COMMENT: 'NEUTRALIZE_VOTE_COMMENT',
+  DOWN_VOTE_COMMENT: 'DOWN_VOTE_COMMENT',
 };
 
 function receiveDetailThreadActionCreator(detailThread) {
@@ -22,35 +23,32 @@ function receiveDetailThreadActionCreator(detailThread) {
   };
 }
 
-function upVoteThreadActionCreator({ userId, threadId, voteType }) {
+function upVoteDetailThreadActionCreator({ userId, threadId }) {
   return {
-    type: ActionType.UP_VOTE_THREAD,
+    type: ActionType.UP_VOTE_DETAIL_THREAD,
     payload: {
       userId,
       threadId,
-      voteType,
     },
   };
 }
 
-function neutralizeVoteThreadActionCreator({ userId, threadId, voteType }) {
+function neutralizeVoteDetailThreadActionCreator({ userId, threadId }) {
   return {
-    type: ActionType.NEUTRALIZE_VOTE_THREAD,
+    type: ActionType.NEUTRALIZE_VOTE_DETAIL_THREAD,
     payload: {
       userId,
       threadId,
-      voteType,
     },
   };
 }
 
-function downVoteThreadActionCreator({ userId, threadId, voteType }) {
+function downVoteDetailThreadActionCreator({ userId, threadId }) {
   return {
-    type: ActionType.DOWN_VOTE_THREAD,
+    type: ActionType.DOWN_VOTE_DETAIL_THREAD,
     payload: {
       userId,
       threadId,
-      voteType,
     },
   };
 }
@@ -64,47 +62,48 @@ function addCommentActionCreator(comment) {
   };
 }
 
-function upVoteCommentActionCreator({ userId, commentId, voteType }) {
+function upVoteCommentActionCreator({ userId, commentId }) {
   return {
     type: ActionType.UP_VOTE_COMMENT,
     payload: {
       userId,
       commentId,
-      voteType,
     },
   };
 }
 
-function neutralizeVoteCommentActionCreator({ userId, commentId, voteType }) {
+function neutralizeVoteCommentActionCreator({ userId, commentId }) {
   return {
     type: ActionType.NEUTRALIZE_VOTE_COMMENT,
     payload: {
       userId,
       commentId,
-      voteType,
     },
   };
 }
 
-function downVoteCommentActionCreator({ userId, commentId, voteType }) {
+function downVoteCommentActionCreator({ userId, commentId }) {
   return {
     type: ActionType.DOWN_VOTE_COMMENT,
     payload: {
       userId,
       commentId,
-      voteType,
     },
   };
 }
 
 function asyncReceiveDetailThread(threadId) {
   return async (dispatch) => {
+    dispatch(showLoading());
+
     try {
       const detailThread = await api.getDetailThread(threadId);
       dispatch(receiveDetailThreadActionCreator(detailThread));
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
+
+    dispatch(hideLoading());
   };
 }
 
@@ -115,128 +114,145 @@ function asyncAddComment({ threadId, content }) {
     try {
       const comment = await api.createComment({ threadId, content });
       dispatch(addCommentActionCreator(comment));
+      toast.success('Komentar berhasil ditambahkan');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
 
     dispatch(hideLoading());
   };
 }
 
-function asyncUpVoteThread(threadId) {
+function asyncUpVoteDetailThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
-    dispatch(upVoteThreadActionCreator({ userId: authUser.id, threadId }));
 
-    try {
-      const { userId, threadId, voteType } = await api.upVoteThread(threadId);
-
-      dispatch(upVoteThreadActionCreator({ userId, threadId, voteType }));
-    } catch (error) {
-      alert(error.message);
-      dispatch(upVoteThreadActionCreator({ userId: authUser.id, threadId }));
-    }
-  };
-}
-
-function asyncNeutralizeVoteThread(threadId) {
-  return async (dispatch, getState) => {
-    const { authUser } = getState();
+    dispatch(showLoading());
     dispatch(
-      neutralizeVoteThreadActionCreator({ userId: authUser.id, threadId })
+      upVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
     );
 
     try {
-      const { userId, threadId, voteType } = await api.neutralizeVoteThread(
-        threadId
-      );
-
-      dispatch(
-        neutralizeVoteThreadActionCreator({ userId, threadId, voteType })
-      );
+      await api.upVoteThread(threadId);
+      toast.success('Upvote diskusi berhasil!');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(
-        neutralizeVoteThreadActionCreator({ userId: authUser.id, threadId })
+        upVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
       );
     }
+
+    dispatch(hideLoading());
   };
 }
 
-function asyncDownVoteThread(threadId) {
+function asyncNeutralizeVoteDetailThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
-    dispatch(downVoteThreadActionCreator({ userId: authUser.id, threadId }));
+
+    dispatch(showLoading());
+    dispatch(
+      neutralizeVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+    );
 
     try {
-      const { userId, threadId, voteType } = await api.downVoteThread(threadId);
-      dispatch(downVoteThreadActionCreator({ userId, threadId, voteType }));
+      await api.neutralizeVoteThread(threadId);
     } catch (error) {
-      alert(error.message);
-      dispatch(downVoteThreadActionCreator({ userId: authUser.id, threadId }));
+      toast.error(error.message);
+      dispatch(
+        neutralizeVoteDetailThreadActionCreator({
+          userId: authUser.id,
+          threadId,
+        }),
+      );
     }
+
+    dispatch(hideLoading());
+  };
+}
+
+function asyncDownVoteDetailThread(threadId) {
+  return async (dispatch, getState) => {
+    const { authUser } = getState();
+
+    dispatch(showLoading());
+    dispatch(
+      downVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+    );
+
+    try {
+      await api.downVoteThread(threadId);
+      toast.success('Downvote diskusi berhasil!');
+    } catch (error) {
+      toast.error(error.message);
+      dispatch(
+        downVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+      );
+    }
+
+    dispatch(hideLoading());
   };
 }
 
 function asyncUpVoteComment(threadId, commentId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
+
+    dispatch(showLoading());
     dispatch(upVoteCommentActionCreator({ userId: authUser.id, commentId }));
 
     try {
-      const { userId, commentId, voteType } = await api.upVoteComment(
-        threadId,
-        commentId
-      );
-      dispatch(upVoteCommentActionCreator({ userId, commentId, voteType }));
+      await api.upVoteComment(threadId, commentId);
+      toast.success('Upvote komentar berhasil!');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(upVoteCommentActionCreator({ userId: authUser.id, commentId }));
     }
+
+    dispatch(hideLoading());
   };
 }
 
 function asyncNeutralizeVoteComment(threadId, commentId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
+
+    dispatch(showLoading());
     dispatch(
-      neutralizeVoteCommentActionCreator({ userId: authUser.id, commentId })
+      neutralizeVoteCommentActionCreator({ userId: authUser.id, commentId }),
     );
 
     try {
-      const { userId, commentId, voteType } = await api.neutralizeVoteComment(
-        threadId,
-        commentId
-      );
-      dispatch(
-        neutralizeVoteCommentActionCreator({ userId, commentId, voteType })
-      );
+      await api.neutralizeVoteComment(threadId, commentId);
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(
-        neutralizeVoteCommentActionCreator({ userId: authUser.id, commentId })
+        neutralizeVoteCommentActionCreator({ userId: authUser.id, commentId }),
       );
     }
+
+    dispatch(hideLoading());
   };
 }
 
 function asyncDownVoteComment(threadId, commentId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
+
+    dispatch(showLoading());
     dispatch(downVoteCommentActionCreator({ userId: authUser.id, commentId }));
 
     try {
-      const { userId, commentId, voteType } = await api.downVoteComment(
-        threadId,
-        commentId
-      );
-      dispatch(downVoteCommentActionCreator({ userId, commentId, voteType }));
+      await api.downVoteComment(threadId, commentId);
+      toast.success('Downvote komentar berhasil!');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
       dispatch(
-        downVoteCommentActionCreator({ userId: authUser.id, commentId })
+        downVoteCommentActionCreator({ userId: authUser.id, commentId }),
       );
     }
+
+    dispatch(hideLoading());
   };
 }
 
@@ -244,17 +260,17 @@ export {
   ActionType,
   receiveDetailThreadActionCreator,
   addCommentActionCreator,
-  upVoteThreadActionCreator,
-  neutralizeVoteThreadActionCreator,
-  downVoteThreadActionCreator,
+  upVoteDetailThreadActionCreator,
+  neutralizeVoteDetailThreadActionCreator,
+  downVoteDetailThreadActionCreator,
   upVoteCommentActionCreator,
   neutralizeVoteCommentActionCreator,
   downVoteCommentActionCreator,
   asyncReceiveDetailThread,
   asyncAddComment,
-  asyncUpVoteThread,
-  asyncNeutralizeVoteThread,
-  asyncDownVoteThread,
+  asyncUpVoteDetailThread,
+  asyncNeutralizeVoteDetailThread,
+  asyncDownVoteDetailThread,
   asyncUpVoteComment,
   asyncNeutralizeVoteComment,
   asyncDownVoteComment,

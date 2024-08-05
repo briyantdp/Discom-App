@@ -1,9 +1,10 @@
-import { showLoading, hideLoading } from "react-redux-loading-bar";
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import toast from 'react-hot-toast';
 
-import api from "../../utils/api";
+import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_LEADERBOARDS: "RECEIVE_LEADERBOARDS",
+  RECEIVE_LEADERBOARDS: 'RECEIVE_LEADERBOARDS',
 };
 
 function receiveLeaderboardsActionCreator(leaderboards) {
@@ -23,7 +24,7 @@ function asyncFetchLeaderboards() {
       const leaderboards = await api.getLeaderboards();
       dispatch(receiveLeaderboardsActionCreator(leaderboards));
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
 
     dispatch(hideLoading());

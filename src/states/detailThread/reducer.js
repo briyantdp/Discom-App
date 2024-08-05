@@ -1,19 +1,43 @@
-import { ActionType } from "./action";
+import { ActionType } from './action';
 
-function detailThreadReducer(detailThread = {}, action = {}) {
+function detailThreadReducer(detailThread = null, action = {}) {
   switch (action.type) {
     case ActionType.RECEIVE_DETAIL_THREAD:
-      console.log(action.payload.detailThread);
       return action.payload.detailThread;
-    case ActionType.UP_VOTE_THREAD:
-    case ActionType.NEUTRALIZE_VOTE_THREAD:
-    case ActionType.DOWN_VOTE_THREAD:
+    case ActionType.UP_VOTE_DETAIL_THREAD:
       if (detailThread.id !== action.payload.threadId) {
         return detailThread;
       }
       return {
         ...detailThread,
-        votes: action.payload.votes,
+        upVotesBy: [...detailThread.upVotesBy, action.payload.userId],
+        downVotesBy: detailThread.downVotesBy.filter(
+          (id) => id !== action.payload.userId,
+        ),
+      };
+    case ActionType.NEUTRALIZE_VOTE_DETAIL_THREAD:
+      if (detailThread.id !== action.payload.threadId) {
+        return detailThread;
+      }
+      return {
+        ...detailThread,
+        upVotesBy: detailThread.upVotesBy.filter(
+          (id) => id !== action.payload.userId,
+        ),
+        downVotesBy: detailThread.downVotesBy.filter(
+          (id) => id !== action.payload.userId,
+        ),
+      };
+    case ActionType.DOWN_VOTE_DETAIL_THREAD:
+      if (detailThread.id !== action.payload.threadId) {
+        return detailThread;
+      }
+      return {
+        ...detailThread,
+        upVotesBy: detailThread.upVotesBy.filter(
+          (id) => id !== action.payload.userId,
+        ),
+        downVotesBy: [...detailThread.downVotesBy, action.payload.userId],
       };
     case ActionType.ADD_COMMENT:
       return {
@@ -21,18 +45,46 @@ function detailThreadReducer(detailThread = {}, action = {}) {
         comments: [...detailThread.comments, action.payload.comment],
       };
     case ActionType.UP_VOTE_COMMENT:
-    case ActionType.NEUTRALIZE_VOTE_COMMENT:
-    case ActionType.DOWN_VOTE_COMMENT:
-      if (detailThread.id !== action.payload.threadId) {
-        return detailThread;
-      }
       return {
         ...detailThread,
-        comments: detailThread.comments.map((comment) =>
-          comment.id === action.payload.commentId
-            ? { ...comment, votes: action.payload.votes }
-            : comment
-        ),
+        comments: detailThread.comments.map((comment) => (comment.id === action.payload.commentId
+          ? {
+            ...comment,
+            upVotesBy: [...comment.upVotesBy, action.payload.userId],
+            downVotesBy: comment.downVotesBy.filter(
+              (id) => id !== action.payload.userId,
+            ),
+          }
+          : comment)),
+      };
+    case ActionType.NEUTRALIZE_VOTE_COMMENT:
+      return {
+        ...detailThread,
+        comments: detailThread.comments.map((comment) => (comment.id === action.payload.commentId
+          ? {
+            ...comment,
+            upVotesBy: comment.upVotesBy.filter(
+              (id) => id !== action.payload.userId,
+            ),
+            downVotesBy: comment.downVotesBy.filter(
+              (id) => id !== action.payload.userId,
+            ),
+          }
+          : comment
+        )),
+      };
+    case ActionType.DOWN_VOTE_COMMENT:
+      return {
+        ...detailThread,
+        comments: detailThread.comments.map((comment) => (comment.id === action.payload.commentId
+          ? {
+            ...comment,
+            upVotesBy: comment.upVotesBy.filter(
+              (id) => id !== action.payload.userId,
+            ),
+            downVotesBy: [...comment.downVotesBy, action.payload.userId],
+          }
+          : comment)),
       };
     default:
       return detailThread;

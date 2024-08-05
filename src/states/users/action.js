@@ -1,7 +1,9 @@
-import api from "../../utils/api";
+import toast from 'react-hot-toast';
+
+import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_USERS: "RECEIVE_USERS",
+  RECEIVE_USERS: 'RECEIVE_USERS',
 };
 
 function receiveUsersActionCreator(users) {
@@ -16,10 +18,10 @@ function receiveUsersActionCreator(users) {
 function asyncRegisterUser({ name, email, password }) {
   return async () => {
     try {
-      // Mendaftarkan data user ke database
       await api.register({ name, email, password });
+      toast.success('Daftar pengguna baru sukses');
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
   };
 }

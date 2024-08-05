@@ -1,10 +1,11 @@
-import { showLoading, hideLoading } from "react-redux-loading-bar";
-import api from "../../utils/api";
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import toast from 'react-hot-toast';
 
-// Objek untuk menyimpan nama tipe action
+import api from '../../utils/api';
+
 const ActionType = {
-  SET_AUTH_USER: "SET_AUTH_USER",
-  UNSET_AUTH_USER: "UNSET_AUTH_USER",
+  SET_AUTH_USER: 'SET_AUTH_USER',
+  UNSET_AUTH_USER: 'UNSET_AUTH_USER',
 };
 
 function setAuthUserActionCreator(authUser) {
@@ -27,35 +28,28 @@ function unsetAuthUserActionCreator(authUser) {
 
 function asyncSetAuthUser({ email, password }) {
   return async (dispatch) => {
-    // Menampilkan loading saat proses set autentikasi user
     dispatch(showLoading());
 
-    // Proses login
     try {
-      // Mendapatkan token untuk akses login
       const token = await api.login({ email, password });
-
-      // Memasukkan token ke localStorage
       api.putAccessToken(token);
 
-      // Mendapatkan data user
-      const authUser = api.getOwnProfile();
+      toast.success('Login sukses');
 
-      // Dispatch setAuthUserActionCreator dengan payload dari data user
+      const authUser = await api.getOwnProfile();
       dispatch(setAuthUserActionCreator(authUser));
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message);
     }
 
-    // Sembunyikan loading ketika proses sudah selesai
     dispatch(hideLoading());
   };
 }
 
 function asyncUnsetAuthUser() {
   return (dispatch) => {
+    api.putAccessToken('');
     dispatch(unsetAuthUserActionCreator());
-    api.putAccessToken("");
   };
 }
 

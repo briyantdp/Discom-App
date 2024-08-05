@@ -1,4 +1,4 @@
-import { ActionType } from "./action";
+import { ActionType } from './action';
 
 function threadsReducer(threads = [], action = {}) {
   switch (action.type) {
@@ -7,7 +7,33 @@ function threadsReducer(threads = [], action = {}) {
     case ActionType.ADD_THREAD:
       return [...threads, action.payload.thread];
     case ActionType.UP_VOTE_THREAD:
+      return threads.map((thread) => {
+        if (thread.id !== action.payload.threadId) {
+          return thread;
+        }
+        return {
+          ...thread,
+          upVotesBy: [...thread.upVotesBy, action.payload.userId],
+          downVotesBy: thread.downVotesBy.filter(
+            (id) => id !== action.payload.userId,
+          ),
+        };
+      });
     case ActionType.NEUTRALIZE_VOTE_THREAD:
+      return threads.map((thread) => {
+        if (thread.id !== action.payload.threadId) {
+          return thread;
+        }
+        return {
+          ...thread,
+          upVotesBy: thread.upVotesBy.filter(
+            (id) => id !== action.payload.userId,
+          ),
+          downVotesBy: thread.downVotesBy.filter(
+            (id) => id !== action.payload.userId,
+          ),
+        };
+      });
     case ActionType.DOWN_VOTE_THREAD:
       return threads.map((thread) => {
         if (thread.id !== action.payload.threadId) {
@@ -15,7 +41,10 @@ function threadsReducer(threads = [], action = {}) {
         }
         return {
           ...thread,
-          ...action.payload,
+          upVotesBy: thread.upVotesBy.filter(
+            (id) => id !== action.payload.userId,
+          ),
+          downVotesBy: [...thread.downVotesBy, action.payload.userId],
         };
       });
     default:
