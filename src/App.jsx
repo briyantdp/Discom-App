@@ -1,22 +1,25 @@
-import { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+/* eslint-disable import/extensions */
 
-import "./App.css";
+import { useEffect } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import './App.css';
 
-import LoginPage from "./pages/LoginPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
-import HomePage from "./pages/HomePage.jsx";
-import DetailPage from "./pages/DetailPage.jsx";
-import LeaderboardPage from "./pages/LeaderboardPage.jsx";
-import CreateThreadPage from "./pages/CreateThreadPage.jsx";
-// import NotFoundPage from "./pages/NotFoundPage.jsx";
+import LoadingBarComponent from './components/LoadingBarComponent';
+import Toast from './components/Toast';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-import { asyncPreloadProcess } from "./states/isPreload/action";
-import { asyncUnsetAuthUser } from "./states/authUser/action";
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import HomePage from './pages/HomePage.jsx';
+import DetailPage from './pages/DetailPage.jsx';
+import LeaderboardPage from './pages/LeaderboardPage.jsx';
+import CreateThreadPage from './pages/CreateThreadPage.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
+
+import { asyncPreloadProcess } from './states/isPreload/action';
 
 function App() {
   const authUser = useSelector((state) => state.authUser);
@@ -28,10 +31,6 @@ function App() {
     dispatch(asyncPreloadProcess());
   }, [dispatch]);
 
-  const signOutHandler = () => {
-    dispatch(asyncUnsetAuthUser());
-  };
-
   if (isPreload) {
     return null;
   }
@@ -39,24 +38,27 @@ function App() {
   if (authUser === null) {
     return (
       <>
-        <Header onSignOut={signOutHandler} />
+        <Header />
+        <Toast />
         <Routes>
           <Route path="/*" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Routes>
-        <Footer />
       </>
     );
   }
 
   return (
     <>
+      <LoadingBarComponent />
       <Header />
+      <Toast />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/threads/:threadId" element={<DetailPage />} />
         <Route path="/new" element={<CreateThreadPage />} />
         <Route path="/leaderboards" element={<LeaderboardPage />} />
+        <Route path="/*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
     </>
