@@ -1,19 +1,21 @@
-import { useRouteError } from "react-router-dom";
+import { Button, Typography } from '@material-tailwind/react';
+import { Link } from 'react-router-dom';
 
 export default function NotFoundPage() {
-  const error = useRouteError();
-  console.error(error);
-
   return (
     <div
       id="error-page"
       className=" bg-blue-gray-900 text-white h-screen flex flex-col items-center justify-center gap-6"
     >
-      <h1 className="font-bold text-4xl">Oops!</h1>
-      <p className="text-xl">Sorry, an unexpected error has occurred.</p>
-      <p className="text-lg">
-        <i>{error.statusText || error.message}</i>
-      </p>
+      <Typography variant="h1" className="font-bold text-9xl">
+        404
+      </Typography>
+      <Typography variant="small" className="text-xl">
+        Oops! Halaman tidak ditemukan
+      </Typography>
+      <Button variant="outlined" color="white" className="w-fit">
+        <Link to="/">Kembali ke halaman utama</Link>
+      </Button>
     </div>
   );
 }
