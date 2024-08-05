@@ -1,16 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
-import { ThemeProvider } from "@material-tailwind/react";
+/* eslint-disable import/extensions */
 
-import App from "./App.jsx";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ThemeProvider } from '@material-tailwind/react';
 
-import stores from "./states";
+import App from './App.jsx';
 
-import "./index.css";
+import stores from './states';
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={stores}>
     <BrowserRouter>
       <React.StrictMode>
@@ -19,5 +21,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ThemeProvider>
       </React.StrictMode>
     </BrowserRouter>
-  </Provider>
+  </Provider>,
 );
