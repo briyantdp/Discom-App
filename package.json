@@ -13,11 +13,12 @@
     "@heroicons/react": "^2.1.4",
     "@material-tailwind/react": "^2.1.9",
     "@reduxjs/toolkit": "^2.2.5",
+    "eslint-config-airbnb": "^19.0.4",
     "html-react-parser": "^5.1.10",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-error-boundary": "^4.0.13",
+    "react-hot-toast": "^2.4.1",
     "react-redux": "^9.1.2",
     "react-redux-loading-bar": "^5.0.8",
     "react-router-dom": "^6.23.1"
