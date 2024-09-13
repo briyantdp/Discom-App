@@ -58,9 +58,9 @@ const threadDetailExample = {
 };
 
 describe('ThreadDetail component', () => {
-  const mockAnimations = () => {
-    Element.prototype.animate = vi.fn().mockImplementation(() => ({ finished: Promise.resolve() }));
-  };
+  // const mockAnimations = () => {
+  //   Element.prototype.animate = vi.fn().mockImplementation(() => ({ finished: Promise.resolve() }));
+  // };
 
   beforeAll(() => {
     mockAnimations();
