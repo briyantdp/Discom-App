@@ -1,9 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Typography, Button, Textarea } from '@material-tailwind/react';
 
-import { asyncAddComment } from '../states/detailThread/action';
+import { asyncAddComment } from '../states/threadDetail/action';
 
 export default function CommentForm() {
   const authUser = useSelector((states) => states.authUser);
@@ -42,6 +43,7 @@ export default function CommentForm() {
           rows={8}
           value={content}
           onChange={onContentChangeHandler}
+          required
         />
         <Button type="submit" className="bg-gray-800 rounded-full p-4 my-4">
           Comment

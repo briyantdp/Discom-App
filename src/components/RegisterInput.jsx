@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 
 import { Input, Button } from '@material-tailwind/react';
@@ -13,6 +14,8 @@ export default function RegisterInput({ register }) {
     <form className="mt-8 mb-2 flex flex-col gap-3">
       <Input
         type="text"
+        color="blue-gray"
+        placeholder="Nama"
         label="Nama"
         size="lg"
         value={name}
@@ -20,6 +23,8 @@ export default function RegisterInput({ register }) {
       />
       <Input
         type="email"
+        color="blue-gray"
+        placeholder="Email"
         label="Email"
         size="lg"
         value={email}
@@ -27,13 +32,15 @@ export default function RegisterInput({ register }) {
       />
       <Input
         type="password"
+        color="blue-gray"
+        placeholder="Password"
         label="Password"
         size="lg"
         value={password}
         onChange={onPasswordChange}
       />
       <Button
-        variant="gradient"
+        className="bg-gray-800 shadow-none hover:shadow-sm hover:shadow-gray-500"
         onClick={() => register({ name, email, password })}
       >
         Daftar

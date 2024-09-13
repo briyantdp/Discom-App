@@ -10,7 +10,7 @@ export default function LeaderboardItem({ user, score }) {
       <div className="flex items-center gap-x-3">
         <Avatar
           size="sm"
-          src={`https://ui-avatars.com/api/?name=${user.avatar}&background=random`}
+          src={`https://ui-avatars.com/api/?name=${user.name}&background=random`}
           alt={user.name}
         />
         <div>

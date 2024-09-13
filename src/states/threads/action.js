@@ -6,12 +6,12 @@ import { addCategoryActionCreator } from '../categories/action';
 import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_THREADS: 'RECEIVE_THREADS',
-  FILTER_THREADS_BY_CATEGORY: 'FILTER_THREADS_BY_CATEGORY',
-  ADD_THREAD: 'ADD_THREAD',
-  UP_VOTE_THREAD: 'UP_VOTE_THREAD',
-  NEUTRALIZE_VOTE_THREAD: 'NEUTRALIZE_VOTE_THREAD',
-  DOWN_VOTE_THREAD: 'DOWN_VOTE_THREAD',
+  RECEIVE_THREADS: 'threads/receive',
+  FILTER_THREADS_BY_CATEGORY: 'threads/filter-by-category',
+  ADD_THREAD: 'threads/add',
+  UP_VOTE_THREAD: 'threads/up-vote',
+  NEUTRALIZE_VOTE_THREAD: 'threads/neutralize-vote',
+  DOWN_VOTE_THREAD: 'threads/down-vote',
 };
 
 function receiveThreadsActionCreator(threads) {

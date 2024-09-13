@@ -17,7 +17,7 @@ import {
   asyncUpVoteComment,
   asyncNeutralizeVoteComment,
   asyncDownVoteComment,
-} from '../states/detailThread/action';
+} from '../states/threadDetail/action';
 
 import getCreatedTime from '../utils/getCreatedTime';
 
@@ -67,11 +67,9 @@ export default function CommentItem({
         </Typography>
       </div>
 
-      <Typography variant="paragraph" className="font-light text-black">
-        {parse(content)}
-      </Typography>
+      {parse(content)}
 
-      <ButtonGroup className="w-fit flex bg-gray-800 gap-1 font-bold rounded-full">
+      <ButtonGroup className="w-fit flex bg-gray-800 gap-1 font-bold rounded-full divide-x-0">
         <Button
           className={
             upVotesBy.includes(authUser.id)

@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_LEADERBOARDS: 'RECEIVE_LEADERBOARDS',
+  RECEIVE_LEADERBOARDS: 'leaderboards/receive',
 };
 
 function receiveLeaderboardsActionCreator(leaderboards) {

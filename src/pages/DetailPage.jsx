@@ -10,25 +10,25 @@ import CommentForm from '../components/CommentForm';
 import CommentList from '../components/CommentList';
 import CommentSkeleton from '../components/CommentSkeleton';
 
-import { asyncReceiveDetailThread } from '../states/detailThread/action';
+import { asyncReceiveThreadDetail } from '../states/threadDetail/action';
 
 export default function DetailPage() {
   const authUser = useSelector((states) => states.authUser);
-  const detailThread = useSelector((state) => state.detailThread);
+  const threadDetail = useSelector((state) => state.threadDetail);
   const dispatch = useDispatch();
 
   const { threadId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(asyncReceiveDetailThread(threadId));
+    dispatch(asyncReceiveThreadDetail(threadId));
   }, [threadId, dispatch]);
 
-  if (detailThread === null) {
+  if (threadDetail === null) {
     navigate('/');
   }
 
-  if (!detailThread?.owner) {
+  if (!threadDetail?.owner) {
     return (
       <main className="detail-thread-skeleton flex flex-col gap-4 py-56 md:py-48 lg:py-36 lg:container lg:mx-auto">
         <ThreadDetailSkeleton />
@@ -47,7 +47,7 @@ export default function DetailPage() {
 
   return (
     <main className="detail-thread flex flex-col gap-4 py-56 md:py-48 lg:py-36 lg:container lg:mx-auto text-white">
-      <ThreadDetail authUser={authUser} detailThread={detailThread} />
+      <ThreadDetail authUser={authUser} threadDetail={threadDetail} />
       <Card
         className="detail-thread__comment container mx-auto w-4/5"
         id="comment-thread"

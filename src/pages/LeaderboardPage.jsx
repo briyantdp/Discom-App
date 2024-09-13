@@ -13,7 +13,7 @@ export default function LeaderboardPage() {
   }, [dispatch]);
 
   return (
-    <main className="min-h-screen flex flex-col justify-center items-center py-56 md:py-48 lg:py-36">
+    <main className="leaderboards min-h-screen flex flex-col justify-center items-center py-56 md:py-48 lg:py-36">
       <LeaderboardTable leaderboards={leaderboards} />
     </main>
   );

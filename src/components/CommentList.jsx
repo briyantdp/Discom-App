@@ -8,17 +8,17 @@ import CommentItem from './CommentItem';
 
 export default function CommentList() {
   const authUser = useSelector((states) => states.authUser);
-  const detailThread = useSelector((state) => state.detailThread);
+  const threadDetail = useSelector((state) => state.threadDetail);
 
   return (
     <div className="comment-list my-8">
       <Typography variant="h5" className="text-black mb-4">
         Komentar (
-        {detailThread.comments.length}
+        {threadDetail.comments.length}
         )
       </Typography>
 
-      {detailThread.comments.map((data, index) => (
+      {threadDetail.comments.map((data, index) => (
         <CommentItem {...data} key={index} authUser={authUser} />
       ))}
     </div>

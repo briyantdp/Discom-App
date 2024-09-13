@@ -1,53 +1,53 @@
 import { ActionType } from './action';
 
-function detailThreadReducer(detailThread = null, action = {}) {
+function threadDetailReducer(threadDetail = null, action = {}) {
   switch (action.type) {
-    case ActionType.RECEIVE_DETAIL_THREAD:
-      return action.payload.detailThread;
-    case ActionType.UP_VOTE_DETAIL_THREAD:
-      if (detailThread.id !== action.payload.threadId) {
-        return detailThread;
+    case ActionType.RECEIVE_THREAD_DETAIL:
+      return action.payload.threadDetail;
+    case ActionType.UP_VOTE_THREAD_DETAIL:
+      if (threadDetail.id !== action.payload.threadId) {
+        return threadDetail;
       }
       return {
-        ...detailThread,
-        upVotesBy: [...detailThread.upVotesBy, action.payload.userId],
-        downVotesBy: detailThread.downVotesBy.filter(
+        ...threadDetail,
+        upVotesBy: [...threadDetail.upVotesBy, action.payload.userId],
+        downVotesBy: threadDetail.downVotesBy.filter(
           (id) => id !== action.payload.userId,
         ),
       };
-    case ActionType.NEUTRALIZE_VOTE_DETAIL_THREAD:
-      if (detailThread.id !== action.payload.threadId) {
-        return detailThread;
+    case ActionType.NEUTRALIZE_VOTE_THREAD_DETAIL:
+      if (threadDetail.id !== action.payload.threadId) {
+        return threadDetail;
       }
       return {
-        ...detailThread,
-        upVotesBy: detailThread.upVotesBy.filter(
+        ...threadDetail,
+        upVotesBy: threadDetail.upVotesBy.filter(
           (id) => id !== action.payload.userId,
         ),
-        downVotesBy: detailThread.downVotesBy.filter(
+        downVotesBy: threadDetail.downVotesBy.filter(
           (id) => id !== action.payload.userId,
         ),
       };
-    case ActionType.DOWN_VOTE_DETAIL_THREAD:
-      if (detailThread.id !== action.payload.threadId) {
-        return detailThread;
+    case ActionType.DOWN_VOTE_THREAD_DETAIL:
+      if (threadDetail.id !== action.payload.threadId) {
+        return threadDetail;
       }
       return {
-        ...detailThread,
-        upVotesBy: detailThread.upVotesBy.filter(
+        ...threadDetail,
+        upVotesBy: threadDetail.upVotesBy.filter(
           (id) => id !== action.payload.userId,
         ),
-        downVotesBy: [...detailThread.downVotesBy, action.payload.userId],
+        downVotesBy: [...threadDetail.downVotesBy, action.payload.userId],
       };
     case ActionType.ADD_COMMENT:
       return {
-        ...detailThread,
-        comments: [...detailThread.comments, action.payload.comment],
+        ...threadDetail,
+        comments: [...threadDetail.comments, action.payload.comment],
       };
     case ActionType.UP_VOTE_COMMENT:
       return {
-        ...detailThread,
-        comments: detailThread.comments.map((comment) => (comment.id === action.payload.commentId
+        ...threadDetail,
+        comments: threadDetail.comments.map((comment) => (comment.id === action.payload.commentId
           ? {
             ...comment,
             upVotesBy: [...comment.upVotesBy, action.payload.userId],
@@ -59,8 +59,8 @@ function detailThreadReducer(detailThread = null, action = {}) {
       };
     case ActionType.NEUTRALIZE_VOTE_COMMENT:
       return {
-        ...detailThread,
-        comments: detailThread.comments.map((comment) => (comment.id === action.payload.commentId
+        ...threadDetail,
+        comments: threadDetail.comments.map((comment) => (comment.id === action.payload.commentId
           ? {
             ...comment,
             upVotesBy: comment.upVotesBy.filter(
@@ -75,8 +75,8 @@ function detailThreadReducer(detailThread = null, action = {}) {
       };
     case ActionType.DOWN_VOTE_COMMENT:
       return {
-        ...detailThread,
-        comments: detailThread.comments.map((comment) => (comment.id === action.payload.commentId
+        ...threadDetail,
+        comments: threadDetail.comments.map((comment) => (comment.id === action.payload.commentId
           ? {
             ...comment,
             upVotesBy: comment.upVotesBy.filter(
@@ -87,8 +87,8 @@ function detailThreadReducer(detailThread = null, action = {}) {
           : comment)),
       };
     default:
-      return detailThread;
+      return threadDetail;
   }
 }
 
-export default detailThreadReducer;
+export default threadDetailReducer;

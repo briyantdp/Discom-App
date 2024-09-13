@@ -6,20 +6,23 @@ import isPreloadReducer from './isPreload/reducer';
 import leaderboardReducer from './leaderboard/reducer';
 import categoriesReducer from './categories/reducer';
 import threadsReducer from './threads/reducer';
-import detailThreadReducer from './detailThread/reducer';
+import threadDetailReducer from './threadDetail/reducer';
 import usersReducer from './users/reducer';
 
-const store = configureStore({
+export const setupStore = (preloadedState) => configureStore({
   reducer: {
     authUser: authUserReducer,
     isPreload: isPreloadReducer,
     leaderboards: leaderboardReducer,
     categories: categoriesReducer,
     threads: threadsReducer,
-    detailThread: detailThreadReducer,
+    threadDetail: threadDetailReducer,
     users: usersReducer,
     loadingBar: loadingBarReducer,
   },
+  preloadedState,
 });
+
+const store = setupStore();
 
 export default store;

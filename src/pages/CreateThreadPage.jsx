@@ -16,7 +16,7 @@ export default function CreateThreadPage() {
   };
 
   return (
-    <main className="create-thread  flex flex-col justify-center items-center py-56 md:py-48 lg:py-36">
+    <main className="create-thread flex flex-col justify-center items-center py-56 md:py-48 lg:py-36">
       <Card className="w-full md:w-3/4 lg:w-1/2 xl:w-1/4">
         <CardBody className="flex flex-col gap-4">
           <Typography variant="h3" color="black" className="text-center">

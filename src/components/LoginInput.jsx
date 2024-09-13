@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import PropTypes from 'prop-types';
 import { Input, Button } from '@material-tailwind/react';
 
@@ -11,20 +12,24 @@ export default function LoginInput({ login }) {
     <form className="mt-8 mb-2 flex flex-col gap-3">
       <Input
         type="email"
+        color="blue-gray"
         label="Email"
+        placeholder="Email"
         size="lg"
         value={email}
         onChange={onEmailChange}
       />
+
       <Input
         type="password"
+        color="blue-gray"
         label="Password"
+        placeholder="Password"
         size="lg"
         value={password}
         onChange={onPasswordChange}
-        icon={<i className="fas fa-heart" />}
       />
-      <Button variant="gradient" onClick={() => login({ email, password })}>
+      <Button className="bg-gray-800 shadow-none hover:shadow-sm hover:shadow-gray-500" onClick={() => login({ email, password })}>
         Log In
       </Button>
     </form>

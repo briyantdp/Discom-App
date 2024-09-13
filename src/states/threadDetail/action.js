@@ -4,38 +4,28 @@ import toast from 'react-hot-toast';
 import api from '../../utils/api';
 
 const ActionType = {
-  RECEIVE_DETAIL_THREAD: 'RECEIVE_DETAIL_THREAD',
-  UP_VOTE_DETAIL_THREAD: 'UP_VOTE_DETAIL_THREAD',
-  NEUTRALIZE_VOTE_DETAIL_THREAD: 'NEUTRALIZE_VOTE_DETAIL_THREAD',
-  DOWN_VOTE_DETAIL_THREAD: 'DOWN_VOTE_DETAIL_THREAD',
-  ADD_COMMENT: 'ADD_COMMENT',
-  UP_VOTE_COMMENT: 'UP_VOTE_COMMENT',
-  NEUTRALIZE_VOTE_COMMENT: 'NEUTRALIZE_VOTE_COMMENT',
-  DOWN_VOTE_COMMENT: 'DOWN_VOTE_COMMENT',
+  RECEIVE_THREAD_DETAIL: 'threadDetail/receive',
+  UP_VOTE_THREAD_DETAIL: 'threadDetail/up-vote',
+  NEUTRALIZE_VOTE_THREAD_DETAIL: 'threadDetail/neutralize-vote',
+  DOWN_VOTE_THREAD_DETAIL: 'threadDetail/down-vote',
+  ADD_COMMENT: 'comment/add',
+  UP_VOTE_COMMENT: 'comment/up-vote',
+  NEUTRALIZE_VOTE_COMMENT: 'comment/neutralize-vote',
+  DOWN_VOTE_COMMENT: 'comment/down-vote',
 };
 
-function receiveDetailThreadActionCreator(detailThread) {
+function receiveThreadDetailActionCreator(threadDetail) {
   return {
-    type: ActionType.RECEIVE_DETAIL_THREAD,
+    type: ActionType.RECEIVE_THREAD_DETAIL,
     payload: {
-      detailThread,
+      threadDetail,
     },
   };
 }
 
-function upVoteDetailThreadActionCreator({ userId, threadId }) {
+function upVoteThreadDetailActionCreator({ userId, threadId }) {
   return {
-    type: ActionType.UP_VOTE_DETAIL_THREAD,
-    payload: {
-      userId,
-      threadId,
-    },
-  };
-}
-
-function neutralizeVoteDetailThreadActionCreator({ userId, threadId }) {
-  return {
-    type: ActionType.NEUTRALIZE_VOTE_DETAIL_THREAD,
+    type: ActionType.UP_VOTE_THREAD_DETAIL,
     payload: {
       userId,
       threadId,
@@ -43,9 +33,19 @@ function neutralizeVoteDetailThreadActionCreator({ userId, threadId }) {
   };
 }
 
-function downVoteDetailThreadActionCreator({ userId, threadId }) {
+function neutralizeVoteThreadDetailActionCreator({ userId, threadId }) {
   return {
-    type: ActionType.DOWN_VOTE_DETAIL_THREAD,
+    type: ActionType.NEUTRALIZE_VOTE_THREAD_DETAIL,
+    payload: {
+      userId,
+      threadId,
+    },
+  };
+}
+
+function downVoteThreadDetailActionCreator({ userId, threadId }) {
+  return {
+    type: ActionType.DOWN_VOTE_THREAD_DETAIL,
     payload: {
       userId,
       threadId,
@@ -92,13 +92,13 @@ function downVoteCommentActionCreator({ userId, commentId }) {
   };
 }
 
-function asyncReceiveDetailThread(threadId) {
+function asyncReceiveThreadDetail(threadId) {
   return async (dispatch) => {
     dispatch(showLoading());
 
     try {
-      const detailThread = await api.getDetailThread(threadId);
-      dispatch(receiveDetailThreadActionCreator(detailThread));
+      const threadDetail = await api.getThreadDetail(threadId);
+      dispatch(receiveThreadDetailActionCreator(threadDetail));
     } catch (error) {
       toast.error(error.message);
     }
@@ -123,13 +123,13 @@ function asyncAddComment({ threadId, content }) {
   };
 }
 
-function asyncUpVoteDetailThread(threadId) {
+function asyncUpVoteThreadDetail(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
 
     dispatch(showLoading());
     dispatch(
-      upVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+      upVoteThreadDetailActionCreator({ userId: authUser.id, threadId }),
     );
 
     try {
@@ -138,7 +138,7 @@ function asyncUpVoteDetailThread(threadId) {
     } catch (error) {
       toast.error(error.message);
       dispatch(
-        upVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+        upVoteThreadDetailActionCreator({ userId: authUser.id, threadId }),
       );
     }
 
@@ -146,13 +146,13 @@ function asyncUpVoteDetailThread(threadId) {
   };
 }
 
-function asyncNeutralizeVoteDetailThread(threadId) {
+function asyncNeutralizeVoteThreadDetail(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
 
     dispatch(showLoading());
     dispatch(
-      neutralizeVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+      neutralizeVoteThreadDetailActionCreator({ userId: authUser.id, threadId }),
     );
 
     try {
@@ -160,7 +160,7 @@ function asyncNeutralizeVoteDetailThread(threadId) {
     } catch (error) {
       toast.error(error.message);
       dispatch(
-        neutralizeVoteDetailThreadActionCreator({
+        neutralizeVoteThreadDetailActionCreator({
           userId: authUser.id,
           threadId,
         }),
@@ -171,13 +171,13 @@ function asyncNeutralizeVoteDetailThread(threadId) {
   };
 }
 
-function asyncDownVoteDetailThread(threadId) {
+function asyncDownVoteThreadDetail(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
 
     dispatch(showLoading());
     dispatch(
-      downVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+      downVoteThreadDetailActionCreator({ userId: authUser.id, threadId }),
     );
 
     try {
@@ -186,7 +186,7 @@ function asyncDownVoteDetailThread(threadId) {
     } catch (error) {
       toast.error(error.message);
       dispatch(
-        downVoteDetailThreadActionCreator({ userId: authUser.id, threadId }),
+        downVoteThreadDetailActionCreator({ userId: authUser.id, threadId }),
       );
     }
 
@@ -258,19 +258,19 @@ function asyncDownVoteComment(threadId, commentId) {
 
 export {
   ActionType,
-  receiveDetailThreadActionCreator,
+  receiveThreadDetailActionCreator,
   addCommentActionCreator,
-  upVoteDetailThreadActionCreator,
-  neutralizeVoteDetailThreadActionCreator,
-  downVoteDetailThreadActionCreator,
+  upVoteThreadDetailActionCreator,
+  neutralizeVoteThreadDetailActionCreator,
+  downVoteThreadDetailActionCreator,
   upVoteCommentActionCreator,
   neutralizeVoteCommentActionCreator,
   downVoteCommentActionCreator,
-  asyncReceiveDetailThread,
+  asyncReceiveThreadDetail,
   asyncAddComment,
-  asyncUpVoteDetailThread,
-  asyncNeutralizeVoteDetailThread,
-  asyncDownVoteDetailThread,
+  asyncUpVoteThreadDetail,
+  asyncNeutralizeVoteThreadDetail,
+  asyncDownVoteThreadDetail,
   asyncUpVoteComment,
   asyncNeutralizeVoteComment,
   asyncDownVoteComment,

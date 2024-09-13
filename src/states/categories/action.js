@@ -1,6 +1,6 @@
 const actionType = {
-  RECEIVE_CATEGORIES: 'RECEIVE_CATEGORIES',
-  ADD_CATEGORY: 'ADD_CATEGORY',
+  RECEIVE_CATEGORIES: 'categories/receive',
+  ADD_CATEGORY: 'categories/add',
 };
 
 function receiveCategoriesActionCreator(categories) {
